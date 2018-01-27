@@ -1,0 +1,4 @@
+%{
+  "yamerl": {:hex, :yamerl, "0.3.3", "df48fe3e6aeaca05ec6c4b35418aa7c77258d0d1c32d578a2e12a14751c10d42", [], [], "hexpm"},
+  "yaml_elixir": {:hex, :yaml_elixir, "1.2.2", "090382499d3d0a4a72b3dcc5d74ada873ec00973ebee163a9ca3a4d69ebb0346", [], [{:yamerl, "~> 0.3.2", [hex: :yamerl, repo: "hexpm", optional: false]}], "hexpm"},
+}
