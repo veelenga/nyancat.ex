@@ -1,21 +1,12 @@
 # Nyancat
 
-**TODO: Add description**
+An Elixir port of the original nyancat CLI by Kevin Lange.
 
-## Installation
+<img width="500" src="https://github.com/veelenga/bin/raw/master/nyancat.ex/demo.png" />
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `nyancat` to your list of dependencies in `mix.exs`:
+## Credits & Inspirations
 
-```elixir
-def deps do
-  [
-    {:nyancat, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/nyancat](https://hexdocs.pm/nyancat).
-
+* [Original Video](https://www.youtube.com/watch?v=QH2-TGUlwu4)
+* [Nyancat CLI](https://github.com/klange/nyancat) by Kevin Lange
+* [Nyancat Ruby](https://github.com/andatche/ruby_nyancat)
+* [Nyancat Go](https://github.com/NARKOZ/go-nyancat)
