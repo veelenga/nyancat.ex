@@ -6,6 +6,7 @@ defmodule Nyancat.MixProject do
       app: :nyancat,
       version: "0.1.0",
       elixir: "~> 1.6",
+      escript: [main_module: Nyancat.Cli],
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]

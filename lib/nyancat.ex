@@ -36,22 +36,25 @@ defmodule Nyancat do
 
   @output "  "
 
-  defp term_dimenstions do
-    case {:io.columns, :io.rows} do
-      {{:ok, max_width}, {:ok, max_height}} -> {max_width, max_height}
-      _ -> {80, 24}
-    end
+  defp load_assets do
+    {
+      YamlElixir.read_from_file("assets/frames.yml"),
+      YamlElixir.read_from_file("assets/palette.yml")
+    }
   end
 
-  defp dimentions(max_width, max_height) do
-    {term_width, term_height} = term_dimenstions()
-    term_width = div term_width, 2 * String.length(@output)
+  defp dimentions(width, height, frames) do
+    first_frame = List.first(frames)
+    frame_width = first_frame |> List.first |> String.length
+    frame_height = first_frame |> length
 
-    min_row = div (max_height - term_height), 2
-    min_col = div (max_width - term_width), 2
+    width = div width, 2 * String.length(@output)
 
-    max_row = if max_height > term_height, do: min_row + term_height, else: max_height
-    max_col = if max_width > term_width, do: min_col + term_width, else: max_width
+    min_row = div (frame_height - height), 2
+    min_col = div (frame_width - width), 2
+
+    max_row = if frame_height > height, do: min_row + height, else: frame_height
+    max_col = if frame_width > width, do: min_col + width, else: frame_width
 
     anim_width = (max_col - min_col) * String.length @output
 
@@ -65,15 +68,7 @@ defmodule Nyancat do
     |> Kernel.<>("\e[m\n")
   end
 
-  defp load_animation do
-    palette = YamlElixir.read_from_file("assets/palette.yml")
-    frames = YamlElixir.read_from_file("assets/frames.yml")
-
-    first_frame = List.first(frames)
-    first_line = List.first(first_frame)
-
-    { rows, cols, width } = dimentions String.length(first_line), length(first_frame)
-
+  defp animation(frames, palette, rows, cols) do
     Enum.map frames, fn(frame) ->
       frame
       |> Enum.slice(rows)
@@ -86,14 +81,27 @@ defmodule Nyancat do
     end
   end
 
-  def start do
+  defp time_line(time, width) do
+    "You have nyaned for #{time} seconds!"
+      |> String.pad_leading(div width, 2)
+  end
+
+  def start(options) do
+    { frames, palette } = load_assets()
+    { rows, cols, anim_width } = dimentions options[:width], options[:height], frames
+
+    start_time = System.system_time(:second)
+
     IO.puts "\e[H\e[2J\e[?25l"
 
-    load_animation()
+    animation(frames, palette, rows, cols)
+    |> Stream.cycle
     |> Enum.each(fn(frame) ->
-        IO.puts frame
-        IO.puts "\e[H"
-        :timer.sleep(90)
-      end)
+      IO.puts frame
+      IO.puts "\e[1;37;17m"
+      IO.puts time_line(System.system_time(:second) - start_time, anim_width)
+      :timer.sleep(90)
+      IO.puts "\e[H"
+    end)
   end
 end
