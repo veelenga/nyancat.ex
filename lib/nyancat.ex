@@ -81,8 +81,12 @@ defmodule Nyancat do
     end
   end
 
-  defp time_line(time, width) do
-    "You have nyaned for #{time} seconds!"
+  defp current_time do
+    System.system_time :second
+  end
+
+  defp time_line(start_time, width) do
+    "You have nyaned for #{current_time() - start_time} seconds!"
       |> String.pad_leading(div width, 2)
   end
 
@@ -90,7 +94,7 @@ defmodule Nyancat do
     { frames, palette } = load_assets()
     { rows, cols, anim_width } = dimentions options[:width], options[:height], frames
 
-    start_time = System.system_time(:second)
+    start_time = current_time()
 
     IO.puts "\e[H\e[2J\e[?25l"
 
@@ -99,7 +103,9 @@ defmodule Nyancat do
     |> Enum.each(fn(frame) ->
       IO.puts frame
       IO.puts "\e[1;37;17m"
-      IO.puts time_line(System.system_time(:second) - start_time, anim_width)
+
+      unless options[:notime], do: IO.puts time_line(start_time, anim_width)
+
       :timer.sleep(90)
       IO.puts "\e[H"
     end)
